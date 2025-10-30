@@ -51,7 +51,6 @@ public class AuthService implements IAuthService {
 
     private void validateAccountIsActive(User user) {
         if (ObjectUtils.isEmpty(user.getIsActive()) || !user.getIsActive()) {
-
             throw new AppException(ErrorCode.ACCOUNT_NOT_ACTIVE);
         }
     }

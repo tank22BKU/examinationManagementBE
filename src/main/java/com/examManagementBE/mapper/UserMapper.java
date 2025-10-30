@@ -44,7 +44,7 @@ public class UserMapper {
                 .password(new BCryptPasswordEncoder().encode(signupRequest.getPassword()))
                 .profileImg(signupRequest.getProfileImg())
                 .roleId(signupRequest.getRoleId())
-                .isActive(false)
+                .isActive(true)
                 .dateOfBirth(DateTimeUtils.getDateTimeNow())
                 .build();
     }
