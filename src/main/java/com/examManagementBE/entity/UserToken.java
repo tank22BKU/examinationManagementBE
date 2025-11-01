@@ -4,6 +4,7 @@ import com.examManagementBE.common.constants.EntityConstants;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
 
@@ -12,7 +13,7 @@ import java.time.OffsetDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = EntityConstants.USER_TOKENS_TABLE)
 public class UserToken extends BaseTimeEntity {

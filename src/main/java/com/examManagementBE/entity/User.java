@@ -3,21 +3,25 @@ package com.examManagementBE.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import com.examManagementBE.common.constants.EntityConstants;
+
 import java.time.OffsetDateTime;
 
 @Entity
+@Table(name = EntityConstants.USER_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = EntityConstants.USER_TABLE)
 public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Integer User_ID;
 
     @Column(name = "full_name", length = 50, nullable = false)
     String fullName;

@@ -7,6 +7,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
 
@@ -16,6 +17,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @MappedSuperclass
 @NoArgsConstructor
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BaseTimeEntity {
     @Column(name = "created_at", nullable = false, updatable = false)

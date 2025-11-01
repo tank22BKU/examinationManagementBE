@@ -43,7 +43,7 @@ public class AuthService implements IAuthService {
 
         return new JwtResponse(
                 token,
-                ObjectUtils.isEmpty(user.getId()) ? null : user.getId().longValue(),
+                ObjectUtils.isEmpty(user.getUser_ID()) ? null : user.getUser_ID().longValue(),
                 user.getFullName(),
                 user.getEmail()
         );
@@ -72,7 +72,7 @@ public class AuthService implements IAuthService {
 
         return new JwtResponse(
                 token,
-                savedUser.getId() != null ? savedUser.getId().longValue() : null,
+                savedUser.getUser_ID() != null ? savedUser.getUser_ID().longValue() : null,
                 savedUser.getFullName(),
                 savedUser.getEmail()
         );
