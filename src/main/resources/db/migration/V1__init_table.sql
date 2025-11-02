@@ -34,6 +34,7 @@ DROP TABLE IF EXISTS Semester;
 DROP TABLE IF EXISTS Role;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS user_tokens;
+DROP TABLE IF EXISTS user;
 
 -- Bật lại kiểm tra khóa ngoại
 SET FOREIGN_KEY_CHECKS = 1;
@@ -44,8 +45,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- Bảng siêu lớp User (Người dùng)
 -- CREATE TABLE IF NOT EXISTS User (
---                                     User_ID INT AUTO_INCREMENT PRIMARY KEY,
---                                     Password VARCHAR(255) NOT NULL,
+--     User_ID INT AUTO_INCREMENT PRIMARY KEY,
+--     Password VARCHAR(255) NOT NULL,
 --     Fname VARCHAR(50),
 --     Minit CHAR(1),
 --     Lname VARCHAR(50),
@@ -53,11 +54,11 @@ SET FOREIGN_KEY_CHECKS = 1;
 --     Address VARCHAR(255),
 --     Phone_number VARCHAR(20),
 --     Email VARCHAR(100) UNIQUE NOT NULL
---     ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE user
+CREATE TABLE IF NOT EXISTS user
 (
-    User_ID            INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID       INT PRIMARY KEY AUTO_INCREMENT,
     full_name     VARCHAR(50)         NOT NULL,
     email         VARCHAR(100) UNIQUE NOT NULL,
     phone_number  VARCHAR(15)         NOT NULL,
@@ -69,17 +70,18 @@ CREATE TABLE user
     date_of_birth DATE,
     created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
-CREATE TABLE user_tokens (
-                              id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID token',
-                              USER_ID INT NOT NULL COMMENT 'Liên kết tới admin',
-                              access_token VARCHAR(500) NOT NULL COMMENT 'Token truy cập',
-                              refresh_token VARCHAR(500) NOT NULL COMMENT 'Token làm mới',
-                              expires_at DATETIME NOT NULL COMMENT 'Thời điểm token hết hạn',
-                              created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Ngày tạo token',
-                              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Ngày cập nhật',
-                              FOREIGN KEY (USER_ID) REFERENCES user(USER_ID)
+CREATE TABLE user_tokens
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID token',
+    USER_ID       INT          NOT NULL COMMENT 'Liên kết tới admin',
+    access_token  VARCHAR(500) NOT NULL COMMENT 'Token truy cập',
+    refresh_token VARCHAR(500) NOT NULL COMMENT 'Token làm mới',
+    expires_at    DATETIME     NOT NULL COMMENT 'Thời điểm token hết hạn',
+    created_at    DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Ngày tạo token',
+    updated_at    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Ngày cập nhật',
+    FOREIGN KEY (USER_ID) REFERENCES user (USER_ID)
 );
 
 -- Bảng Role (Vai trò)
@@ -177,17 +179,17 @@ CREATE TABLE IF NOT EXISTS Answer (
 
 -- Mối quan hệ N-N 'assigned to' giữa User và Role
 CREATE TABLE IF NOT EXISTS User_Role (
-                                         User_ID INT,
-                                         Role_ID INT,
-                                         PRIMARY KEY (User_ID, Role_ID),
+    User_ID INT,
+    Role_ID INT,
+    PRIMARY KEY (User_ID, Role_ID),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID),
     FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)
     ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'teach' giữa Teacher và Class
 CREATE TABLE IF NOT EXISTS Teaches (
-                                       Teacher_User_ID INT,
-                                       Course_ID VARCHAR(20),
+    Teacher_User_ID INT,
+    Course_ID VARCHAR(20),
     `Group` VARCHAR(20),
     PRIMARY KEY (Teacher_User_ID, Course_ID, `Group`),
     FOREIGN KEY (Teacher_User_ID) REFERENCES Teacher(User_ID),
@@ -196,17 +198,17 @@ CREATE TABLE IF NOT EXISTS Teaches (
 
 -- Mối quan hệ N-N 'join' giữa Student và Class
 CREATE TABLE IF NOT EXISTS Joins (
-                                     Student_User_ID INT,
-                                     Course_ID VARCHAR(20),
+    Student_User_ID INT,
+    Course_ID VARCHAR(20),
     `Group` VARCHAR(20),
     PRIMARY KEY (Student_User_ID, Course_ID, `Group`),
     FOREIGN KEY (Student_User_ID) REFERENCES Student(User_ID),
     FOREIGN KEY (Course_ID, `Group`) REFERENCES Class(Course_ID, `Group`)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'conduct' giữa Class và Test (có thuộc tính)
 CREATE TABLE IF NOT EXISTS Class_Test (
-                                          Course_ID VARCHAR(20),
+    Course_ID VARCHAR(20),
     `Group` VARCHAR(20),
     Test_ID INT,
     Deadline DATETIME,
@@ -216,16 +218,16 @@ CREATE TABLE IF NOT EXISTS Class_Test (
     PRIMARY KEY (Course_ID, `Group`, Test_ID),
     FOREIGN KEY (Course_ID, `Group`) REFERENCES Class(Course_ID, `Group`),
     FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'include' giữa Test và Question
 CREATE TABLE IF NOT EXISTS Test_Question (
-                                             Test_ID INT,
-                                             Question_ID INT,
-                                             PRIMARY KEY (Test_ID, Question_ID),
+    Test_ID INT,
+    Question_ID INT,
+    PRIMARY KEY (Test_ID, Question_ID),
     FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID),
     FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'Takes' giữa Student và Test (có thuộc tính)
 CREATE TABLE IF NOT EXISTS Student_Test_Attempt (

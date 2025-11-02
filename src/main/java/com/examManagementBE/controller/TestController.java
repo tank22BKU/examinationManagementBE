@@ -1,49 +1,32 @@
 package com.examManagementBE.controller;
 
-import com.examManagementBE.entity.User;
+import com.examManagementBE.common.constants.EndpointConstants;
 import com.examManagementBE.entity.assessment.Test;
-import com.examManagementBE.entity.user.*;
 import com.examManagementBE.pojo.request.assessment.TestCreationRequest;
-import com.examManagementBE.repository.TeacherRepository;
-import com.examManagementBE.repository.UserRepository;
-import com.examManagementBE.repository.assessment.TestRepository;
-import com.examManagementBE.service.assessment.QuestionService;
+import com.examManagementBE.service.assessment.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(EndpointConstants.TEST)
 @RequiredArgsConstructor
 public class TestController {
 
-    private final TestRepository testRepository;
-    private final TeacherRepository teacherRepository;
-    private final QuestionService questionService;
+    private final TestService testService;
 
-    @GetMapping("/get_all_tests")
+    @GetMapping("/tests")
     public ResponseEntity<List<Test>> getAllTests() {
-        List<Test> tests = testRepository.findAll();
+        List<Test> tests = testService.getAllTests();
         return ResponseEntity.ok(tests);
     }
 
-    @PostMapping("/create_new_test")
-    public ResponseEntity<Test> createTest(@RequestBody TestCreationRequest request) {
-        Optional<Teacher> teacher = teacherRepository.findById(request.getCreatorId());
-        Test test = Test.builder().title(request.getTittle())
-                .description(request.getDescription())
-                .passCode(request.getPassCode())
-                .duration(request.getDuration())
-                .questions(request.getQuestionCount())
-                .submissions(request.getSubmisssionCount())
-                .creator(null)
-                .build();
-        testRepository.save(test);
-        questionService.SaveQuestionList(request.getQuestions());
-        return ResponseEntity.ok(test);
+    @PostMapping("/")
+    public ResponseEntity<Boolean> createTest(@RequestBody TestCreationRequest request) {
+        boolean res = testService.saveTest(request);
+        return ResponseEntity.ok(res);
     }
 
 }
