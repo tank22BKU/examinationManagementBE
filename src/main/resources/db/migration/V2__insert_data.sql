@@ -89,15 +89,15 @@ INSERT INTO Course (Course_ID, Name, Language, Semester_Name) VALUES
                                                                   ('DB202', 'Cơ sở dữ liệu nâng cao', 'Tiếng Việt', 'Học kỳ 2 2024-2025');
 
 -- Bảng Question (Câu hỏi) - (phụ thuộc vào Teacher)
-INSERT INTO Question (Question_ID, Question_text, Composer_Teacher_ID) VALUES
-                                                                           (1, 'Mô hình Agile là gì?', 1),
-                                                                           (2, 'Sự khác biệt giữa `PRIMARY KEY` và `UNIQUE KEY` trong SQL?', 2),
-                                                                           (3, 'Hãy mô tả 3 tầng (3-tier architecture) trong phát triển phần mềm.', 1);
+INSERT INTO Question (Question_ID, Question_text, Score, Composer_Teacher_ID) VALUES
+                                                                           (1, 'Mô hình Agile là gì?', 10,1),
+                                                                           (2, 'Sự khác biệt giữa `PRIMARY KEY` và `UNIQUE KEY` trong SQL?', 15,2),
+                                                                           (3, 'Hãy mô tả 3 tầng (3-tier architecture) trong phát triển phần mềm.', 20,1);
 
 -- Bảng Test (Bài kiểm tra) - (phụ thuộc vào Teacher)
-INSERT INTO Test (Test_ID, Title, Description, Pass_code, Status, Duration, Questions, Submissions, Creator_Teacher_ID) VALUES
-                                                                                  (1, 'Kiểm tra Giữa kỳ SE101', 'Kiến thức chương 1-3 về quy trình phát triển PM.', 'pass123', true, 45, 10, 0, 1),
-                                                                                  (2, 'Kiểm tra 15 phút CS101', 'Kiến thức về danh sách liên kết.', 'cs101test', true, 45, 10, 0, 2);
+INSERT INTO Test (Test_ID, Title, Description, Pass_code, Status, Duration, Questions, Submissions, Creator_Teacher_ID, Released_Answer, Released_Score) VALUES
+                                                                                  (1, 'Kiểm tra Giữa kỳ SE101', 'Kiến thức chương 1-3 về quy trình phát triển PM.', 'pass123', true, 45, 10, 0, 1, true, true),
+                                                                                  (2, 'Kiểm tra 15 phút CS101', 'Kiến thức về danh sách liên kết.', 'cs101test', true, 45, 10, 0, 2, true, true);
 
 -- ---------------------------------
 -- 4. Bảng phụ thuộc cấp 3 (Thực thể yếu & Phụ thuộc Câu hỏi)
@@ -172,20 +172,20 @@ INSERT INTO Student_Test_Attempt (Student_User_ID, Test_ID, Start_time, Submit_t
 -- (Lưu ý: Thiết kế bảng này trong schema.sql hơi lạ
 -- vì nó không liên kết trực tiếp với Test_ID hay Question_ID,
 -- chỉ liên kết với Student và Answer)
-INSERT INTO Student_Answer_Log (Student_User_ID, Selected_Answer_ID, Student_answer_text) VALUES
+INSERT INTO Student_Answer_Log (Student_User_ID, Question_ID, Selected_Answer_ID, Student_answer_text) VALUES
 -- Giả sử SV Cường (3) trả lời Test 1:
 -- Trả lời Câu 1 (Agile) -> chọn đáp án 2 (Đúng)
-(3, 2, NULL),
+(3, 1 ,2, NULL),
 -- Trả lời Câu 3 (3-tier) -> đây là câu tự luận
-(3, 7, 'Câu trả lời tự luận của Cường về 3 tầng: Presentation, Logic, Data.'),
+(3, 3 ,7, 'Câu trả lời tự luận của Cường về 3 tầng: Presentation, Logic, Data.'),
 
 -- Giả sử SV Dung (4) trả lời Test 1:
 -- Trả lời Câu 1 (Agile) -> chọn đáp án 1 (Sai)
-(4, 1, NULL),
+(4, 1 ,1, NULL),
 -- Trả lời Câu 3 (3-tier) -> đây là câu tự luận
-(4, 7, 'Em không chắc lắm nhưng em nghĩ là...'),
+(4, 3 ,7, 'Em không chắc lắm nhưng em nghĩ là...'),
 
 -- Giả sử SV Cường (3) trả lời Test 2:
 -- Trả lời Câu 2 (SQL) -> chọn đáp án 4 và 6 (chọn nhiều đáp án)
-(3, 4, NULL),
-(3, 6, NULL);
+(3,2 ,4, NULL),
+(3,2,6, NULL);

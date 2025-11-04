@@ -12,4 +12,6 @@ public class EntityConstants {
     public static final String TEST_TABLE = "Test";
     public static final String QUESTION_TABLE = "Question";
     public static final String ANSWER_TABLE = "Answer";
+    public static final String STUDENT_TEST_ATTEMPT = "Student_Test_Attempt";
+    public static final String STUDENT_ANSWER_LOG = "Student_Answer_Log";
 }

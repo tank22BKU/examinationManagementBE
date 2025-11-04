@@ -17,7 +17,7 @@ public class TestController {
 
     private final TestService testService;
 
-    @GetMapping("/tests")
+    @GetMapping(EndpointConstants.ALL_TEST)
     public ResponseEntity<List<Test>> getAllTests() {
         List<Test> tests = testService.getAllTests();
         return ResponseEntity.ok(tests);

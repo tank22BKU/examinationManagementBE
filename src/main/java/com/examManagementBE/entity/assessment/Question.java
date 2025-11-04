@@ -24,6 +24,9 @@ public class Question {
     @Column(name = "Question_text", columnDefinition = "TEXT", nullable = false)
     String questionText;
 
+    @Column(name="Score", columnDefinition = "INT", nullable = false)
+    Integer score;
+
     @ManyToOne
     @JoinColumn(name = "Composer_Teacher_ID")
     Teacher composer;

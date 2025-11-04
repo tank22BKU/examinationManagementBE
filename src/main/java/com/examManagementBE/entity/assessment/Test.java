@@ -42,6 +42,12 @@ public class Test {
     @Column(name = "Submissions")
     Integer submissions;
 
+    @Column(name = "Released_Answer")
+    Boolean releasedAnswer;
+
+    @Column(name = "Released_Score")
+    Boolean releasedScore;
+
     @ManyToOne
     @JoinColumn(name = "Creator_Teacher_ID")
     Teacher creator;

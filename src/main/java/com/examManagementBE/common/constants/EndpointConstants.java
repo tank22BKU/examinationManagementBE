@@ -10,6 +10,9 @@ public class EndpointConstants {
     public static final String API = "/api";
     public static final String ADMIN = "/admin";
     public static final String ID = "/{id}";
+    public static final String DETAILS = "/details";
+    public static final String STUDENT = "/student";
+    public static final String ALL_STUDENTS = "/students";
 
     // 🔹 Auth Endpoints
     public static final String AUTH = "/auth";
@@ -21,4 +24,5 @@ public class EndpointConstants {
     // Test Endpoints
     public static final String TEST = "/test";
     public static final String ALL_TEST = "/tests";
+    public static final String HISTORY = "/history";
 }

@@ -1,17 +1,5 @@
 -- USE springdb;
 
--- CREATE TABLE  IF NOT EXISTS users (
---     id BIGINT AUTO_INCREMENT PRIMARY KEY,
---     name VARCHAR(255) NOT NULL
--- );
-
--- CREATE TABLE IF NOT EXISTS books (
---     id BIGINT AUTO_INCREMENT PRIMARY KEY,
---     title VARCHAR(255) NOT NULL,
---     user_id BIGINT,
---     FOREIGN KEY (user_id) REFERENCES users(id)
--- );
-
 -- Vô hiệu hóa kiểm tra khóa ngoại
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -38,23 +26,6 @@ DROP TABLE IF EXISTS user;
 
 -- Bật lại kiểm tra khóa ngoại
 SET FOREIGN_KEY_CHECKS = 1;
-
--- ---------------------------------
--- Bảng cho Thực thể & Siêu lớp
--- ---------------------------------
-
--- Bảng siêu lớp User (Người dùng)
--- CREATE TABLE IF NOT EXISTS User (
---     User_ID INT AUTO_INCREMENT PRIMARY KEY,
---     Password VARCHAR(255) NOT NULL,
---     Fname VARCHAR(50),
---     Minit CHAR(1),
---     Lname VARCHAR(50),
---     Bdate DATE,
---     Address VARCHAR(255),
---     Phone_number VARCHAR(20),
---     Email VARCHAR(100) UNIQUE NOT NULL
--- ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS user
 (
@@ -86,24 +57,24 @@ CREATE TABLE user_tokens
 
 -- Bảng Role (Vai trò)
 CREATE TABLE IF NOT EXISTS Role (
-                                    Role_ID INT AUTO_INCREMENT PRIMARY KEY,
-                                    Role_name VARCHAR(50) NOT NULL UNIQUE
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    Role_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Role_name VARCHAR(50) NOT NULL UNIQUE
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng Semester (Học kỳ)
 CREATE TABLE IF NOT EXISTS Semester (
-                                        Semester_Name VARCHAR(50) PRIMARY KEY
+    Semester_Name VARCHAR(50) PRIMARY KEY
     -- Giả định tên học kỳ là duy nhất, ví dụ: 'Học kỳ 1 2025-2026'
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng Course (Khóa học)
 CREATE TABLE IF NOT EXISTS Course (
-                                      Course_ID VARCHAR(20) PRIMARY KEY,
+    Course_ID VARCHAR(20) PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
     Language VARCHAR(50), -- Thuộc tính 'Language' của Course
     Semester_Name VARCHAR(50), -- Mối quan hệ N-1 với Semester
     FOREIGN KEY (Semester_Name) REFERENCES Semester(Semester_Name)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------
 -- Bảng cho các Lớp con (Chuyên biệt hóa)
@@ -111,20 +82,20 @@ CREATE TABLE IF NOT EXISTS Course (
 
 -- Bảng Teacher (Giáo viên) - Lớp con của User
 CREATE TABLE IF NOT EXISTS Teacher (
-                                       User_ID INT PRIMARY KEY,
-                                       Specialization VARCHAR(100),
+    User_ID INT PRIMARY KEY,
+    Specialization VARCHAR(100),
     Qualification VARCHAR(100),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng Student (Học sinh) - Lớp con của User
 CREATE TABLE IF NOT EXISTS Student (
-                                       User_ID INT PRIMARY KEY,
-                                       Grade_level VARCHAR(50),
+    User_ID INT PRIMARY KEY,
+    Grade_level VARCHAR(50),
     Major VARCHAR(100),
     Education_level VARCHAR(100),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------
 -- Bảng cho Thực thể Yếu
@@ -132,11 +103,11 @@ CREATE TABLE IF NOT EXISTS Student (
 
 -- Bảng Class (Lớp học) - Thực thể yếu phụ thuộc vào Course
 CREATE TABLE IF NOT EXISTS Class (
-                                     Course_ID VARCHAR(20),
+    Course_ID VARCHAR(20),
     `Group` VARCHAR(20), -- 'Group' là từ khóa, nên dùng dấu backtick
     PRIMARY KEY (Course_ID, `Group`),
     FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------
 -- Bảng cho các Thực thể chính còn lại
@@ -144,34 +115,37 @@ CREATE TABLE IF NOT EXISTS Class (
 
 -- Bảng Test (Bài kiểm tra)
 CREATE TABLE IF NOT EXISTS Test (
-                                    Test_ID INT AUTO_INCREMENT PRIMARY KEY,
-                                    Title VARCHAR(255) UNIQUE NOT NULL,
+    Test_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(255) UNIQUE NOT NULL,
     Description TEXT,
     Pass_code VARCHAR(50),
     Status BOOLEAN DEFAULT TRUE,
     Duration INT,
     Questions INT,
     Submissions INT,
+    Released_Answer BOOLEAN DEFAULT FALSE,
+    Released_Score BOOLEAN DEFAULT FALSE,
     Creator_Teacher_ID INT, -- Mối quan hệ 1-N 'create'
     FOREIGN KEY (Creator_Teacher_ID) REFERENCES Teacher(User_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng Question (Câu hỏi)
 CREATE TABLE IF NOT EXISTS Question (
-                                        Question_ID INT AUTO_INCREMENT PRIMARY KEY,
-                                        Question_text TEXT NOT NULL,
-                                        Composer_Teacher_ID INT, -- Mối quan hệ 1-N 'compose'
-                                        FOREIGN KEY (Composer_Teacher_ID) REFERENCES Teacher(User_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    Question_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Question_text TEXT NOT NULL,
+    Score INT,
+    Composer_Teacher_ID INT, -- Mối quan hệ 1-N 'compose'
+    FOREIGN KEY (Composer_Teacher_ID) REFERENCES Teacher(User_ID)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng Answer (Câu trả lời)
 CREATE TABLE IF NOT EXISTS Answer (
-                                      Answer_ID INT AUTO_INCREMENT PRIMARY KEY,
-                                      Answer_text TEXT NOT NULL,
-                                      Correct_answer BOOLEAN DEFAULT FALSE, -- Thuộc tính 'Correct_answer'
-                                      Question_ID INT, -- Mối quan hệ 1-N 'has'
-                                      FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    Answer_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Answer_text TEXT NOT NULL,
+    Correct_answer BOOLEAN DEFAULT FALSE, -- Thuộc tính 'Correct_answer'
+    Question_ID INT, -- Mối quan hệ 1-N 'has'
+    FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------
 -- Bảng cho các Mối quan hệ N-N (Bảng liên kết)
@@ -184,7 +158,7 @@ CREATE TABLE IF NOT EXISTS User_Role (
     PRIMARY KEY (User_ID, Role_ID),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID),
     FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'teach' giữa Teacher và Class
 CREATE TABLE IF NOT EXISTS Teaches (
@@ -194,7 +168,7 @@ CREATE TABLE IF NOT EXISTS Teaches (
     PRIMARY KEY (Teacher_User_ID, Course_ID, `Group`),
     FOREIGN KEY (Teacher_User_ID) REFERENCES Teacher(User_ID),
     FOREIGN KEY (Course_ID, `Group`) REFERENCES Class(Course_ID, `Group`)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'join' giữa Student và Class
 CREATE TABLE IF NOT EXISTS Joins (
@@ -231,25 +205,27 @@ CREATE TABLE IF NOT EXISTS Test_Question (
 
 -- Mối quan hệ N-N 'Takes' giữa Student và Test (có thuộc tính)
 CREATE TABLE IF NOT EXISTS Student_Test_Attempt (
-                                                    Student_User_ID INT,
-                                                    Test_ID INT,
-                                                    Start_time DATETIME,
-                                                    Submit_time DATETIME,
+    Student_User_ID INT,
+    Test_ID INT,
+    Start_time DATETIME,
+    Submit_time DATETIME,
     -- Thuộc tính 'Result' (dạng dotted) là thuộc tính dẫn xuất,
     -- nó sẽ được tính toán chứ không lưu trữ.
-                                                    PRIMARY KEY (Student_User_ID, Test_ID),
+    PRIMARY KEY (Student_User_ID, Test_ID),
     FOREIGN KEY (Student_User_ID) REFERENCES Student(User_ID),
     FOREIGN KEY (Test_ID) REFERENCES Test(Test_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mối quan hệ N-N 'select' giữa Student và Answer (có thuộc tính)
 -- Bảng này ghi lại câu trả lời của sinh viên cho từng câu hỏi trong một lần làm bài
 CREATE TABLE IF NOT EXISTS Student_Answer_Log (
-                                                  Student_User_ID INT,
-                                                  Selected_Answer_ID INT, -- Có thể NULL nếu là câu hỏi tự luận
-                                                  Student_answer_text TEXT, -- Thuộc tính 'Student_answer_text'
-                                                  PRIMARY KEY (Student_User_ID, Selected_Answer_ID),
+    Student_User_ID INT,
+    Question_ID INT,
+    Selected_Answer_ID INT, -- Có thể NULL nếu là câu hỏi tự luận
+    Student_answer_text TEXT, -- Thuộc tính 'Student_answer_text'
+    PRIMARY KEY (Student_User_ID, Question_ID, Selected_Answer_ID),
     -- Liên kết đến lần làm bài cụ thể
     FOREIGN KEY (Student_User_ID) REFERENCES Student(User_ID),
+    FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID),
     FOREIGN KEY (Selected_Answer_ID) REFERENCES Answer(Answer_ID)
-    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
