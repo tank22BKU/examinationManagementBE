@@ -14,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @IdClass(TestQuestionId.class)
 public class TestQuestion {
-
     @Id
     @Column(name = "Test_ID")
     Integer testId;

@@ -16,4 +16,9 @@ public class EndpointConstants {
     public static final String SIGN_UP = "/sign-up";
     public static final String CHANGE_PASSWORD = "/change-password";
     public static final String ACTIVE = "/activate/{id}";
+
+    // Test Endpoints
+    public static final String TEST = "/test";
+    // Question Endpoints
+    public static final String QUESTION = "/question";
 }
