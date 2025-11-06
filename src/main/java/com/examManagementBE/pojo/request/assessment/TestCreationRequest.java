@@ -22,4 +22,6 @@ public class TestCreationRequest {
     Integer submisssionCount;
     Integer creatorId;
     List<Question> questions;
+    Boolean releasedAnswer;
+    Boolean releasedScore;
 }
