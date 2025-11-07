@@ -25,4 +25,9 @@ public class EndpointConstants {
     public static final String TEST = "/test";
     public static final String ALL_TEST = "/tests";
     public static final String HISTORY = "/history";
+    public static final String VERIFY_PASSCODE = "/verify_passcode/{passcode}";
+
+    // AI Endpoints
+    public static final String AI = "/ai";
+    public static final String ASSESSMENT = "/assessment";
 }
