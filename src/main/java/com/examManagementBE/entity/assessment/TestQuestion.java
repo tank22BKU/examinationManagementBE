@@ -1,0 +1,35 @@
+package com.examManagementBE.entity.assessment;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Entity
+@Table(name = "test_question")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@IdClass(TestQuestionId.class)
+public class TestQuestion {
+
+    @Id
+    @Column(name = "Test_ID")
+    Integer testId;
+
+    @Id
+    @Column(name = "Question_ID")
+    Integer questionId;
+
+    @ManyToOne
+    @MapsId("testId")
+    @JoinColumn(name = "Test_ID", insertable = false, updatable = false)
+    Test test;
+
+    @ManyToOne
+    @MapsId("questionId")
+    @JoinColumn(name = "Question_ID", insertable = false, updatable = false)
+    Question question;
+}

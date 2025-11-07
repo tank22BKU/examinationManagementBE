@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: examManagement
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+  flyway:
+    enabled: false
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration  # Ch? ??nh th? m?c ch?a file migration
+
+  server:
+    port: 8080
+
+  logging:
+    level:
+      root: INFO
+      org.hibernate: ERROR
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+
+app:
+  jwtSecret: "bXlTZXJldEtleUxvbmclw6qI8TKZ9WXzH+OaD4jRge7xVtkA7tSy75cFDi5Jw=="
+  jwtExpirationMs: 604800000
