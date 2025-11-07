@@ -30,7 +30,11 @@ public class StudentAnswerLog {
     Question question;
 
     @ManyToOne
-    @MapsId("selectedAnswerId")
+    @MapsId("testId")
+    @JoinColumn(name = "Test_ID")
+    Test test;
+
+    @ManyToOne
     @JoinColumn(name = "Selected_Answer_ID")
     Answer selectedAnswer;
 

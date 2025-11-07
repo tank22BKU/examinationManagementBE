@@ -48,6 +48,10 @@ public class Test {
     @Column(name = "Released_Score")
     Boolean releasedScore;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "test_status")
+    TestStatus testStatus;
+
     @ManyToOne
     @JoinColumn(name = "Creator_Teacher_ID")
     Teacher creator;

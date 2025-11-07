@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -35,4 +36,10 @@ public class StudentTestAttempt {
 
     @Column(name = "Submit_time")
     OffsetDateTime submitTime;
+
+    @Column(name = "actual_time")
+    LocalTime actualTime;
+
+    @Column(name = "score")
+    Integer score;
 }

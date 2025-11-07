@@ -92,12 +92,17 @@ INSERT INTO Course (Course_ID, Name, Language, Semester_Name) VALUES
 INSERT INTO Question (Question_ID, Question_text, Score, Composer_Teacher_ID) VALUES
                                                                            (1, 'Mô hình Agile là gì?', 10,1),
                                                                            (2, 'Sự khác biệt giữa `PRIMARY KEY` và `UNIQUE KEY` trong SQL?', 15,2),
-                                                                           (3, 'Hãy mô tả 3 tầng (3-tier architecture) trong phát triển phần mềm.', 20,1);
+                                                                           (3, 'Hãy mô tả 3 tầng (3-tier architecture) trong phát triển phần mềm.', 20,1),
+                                                                           (4, 'Có mấy loại danh sách liên Kết', 10,1),
+                                                                           (5, 'Reduce có tối đa bao nhiêu tham số ?', 20,1),
+                                                                           (6, 'Đồ thị có hướng có mấy đặc điểm chính ?', 15,1);
 
 -- Bảng Test (Bài kiểm tra) - (phụ thuộc vào Teacher)
-INSERT INTO Test (Test_ID, Title, Description, Pass_code, Status, Duration, Questions, Submissions, Creator_Teacher_ID, Released_Answer, Released_Score) VALUES
-                                                                                  (1, 'Kiểm tra Giữa kỳ SE101', 'Kiến thức chương 1-3 về quy trình phát triển PM.', 'pass123', true, 45, 10, 0, 1, true, true),
-                                                                                  (2, 'Kiểm tra 15 phút CS101', 'Kiến thức về danh sách liên kết.', 'cs101test', true, 45, 10, 0, 2, true, true);
+INSERT INTO Test (Test_ID, Title, Description, Pass_code, Status, Duration, Questions, Submissions, Creator_Teacher_ID, Released_Answer, Released_Score, test_status) VALUES
+                                                                                  (1, 'Kiểm tra Giữa kỳ SE101', 'Kiến thức chương 1-3 về quy trình phát triển PM.', 'pass123', true, 45, 2, 0, 1, true, true, 'IN_PROGRESS'),
+                                                                                  (2, 'Kiểm tra 15 phút CS101', 'Kiến thức về danh sách liên kết.', 'cs101test', true, 45, 2, 0, 2, true, true, 'IN_PROGRESS'),
+                                                                                  (3, 'Kiểm tra 30 phút DSA', 'Kiến thức về đồ thị.', 'dsa111', true, 30, 10, 0, 2, true, true, 'IN_PROGRESS'),
+                                                                                  (4, 'Kiểm tra 15 phút PPL', 'Kiến thức về Reduce.', 'ppl111', true, 45, 10, 0, 2, true, true, 'IN_PROGRESS');
 
 -- ---------------------------------
 -- 4. Bảng phụ thuộc cấp 3 (Thực thể yếu & Phụ thuộc Câu hỏi)
@@ -120,7 +125,19 @@ INSERT INTO Answer (Answer_ID, Answer_text, Correct_answer, Question_ID) VALUES
 (5, 'Cả hai đều giống hệt nhau.', FALSE, 2),
 (6, 'Một bảng chỉ có 1 PRIMARY KEY, nhưng có thể có nhiều UNIQUE KEY.', TRUE, 2),
 -- Câu 3 là câu tự luận, không có đáp án trắc nghiệm
-(7, 'Đây là câu trả lời mẫu cho câu tự luận.', FALSE, 3);
+(7, 'Đây là câu trả lời mẫu cho câu tự luận.', FALSE, 3),
+-- DA câu 4
+(8, '1', FALSE, 4),
+(9, '2', FALSE, 4),
+(10, '3', TRUE, 4),
+-- DA câu 5
+(11, '1', TRUE, 5),
+(12, '2', FALSE, 5),
+(13, '3', FALSE, 5),
+-- DA câu 6
+(14, '1', FALSE, 6),
+(15, '2', TRUE, 6),
+(16, '3', FALSE, 6);
 
 
 -- ---------------------------------
@@ -156,7 +173,17 @@ INSERT INTO Class_Test (Course_ID, `Group`, Test_ID, Deadline, Create_date, Time
 INSERT INTO Test_Question (Test_ID, Question_ID) VALUES
                                                      (1, 1), -- Test 1 có câu hỏi 1 (Agile)
                                                      (1, 3), -- Test 1 có câu hỏi 3 (3-tier)
-                                                     (2, 2); -- Test 2 có câu hỏi 2 (SQL)
+                                                     (2, 2), -- Test 2 có câu hỏi 2 (SQL)
+                                                 (3,1),
+                                                 (3,2),
+                                                 (3,3),
+                                                 (3,4),
+                                                 (3,5),
+                                                 (4,2),
+                                                 (4,3),
+                                                 (4,4),
+                                                 (4,5),
+                                                 (4,6);
 
 -- Mối quan hệ N-N 'Takes' giữa Student và Test
 INSERT INTO Student_Test_Attempt (Student_User_ID, Test_ID, Start_time, Submit_time) VALUES
@@ -165,27 +192,43 @@ INSERT INTO Student_Test_Attempt (Student_User_ID, Test_ID, Start_time, Submit_t
 -- SV Dung làm Test 1 (SE101)
 (4, 1, '2024-10-29 10:00:00', '2024-10-29 10:30:10'),
 -- SV Cường làm Test 2 (CS101)
-(3, 2, '2024-10-25 08:00:05', '2024-10-25 08:14:55');
+(3, 2, '2024-10-25 08:00:05', '2024-10-25 08:14:55'),
+
+(3, 3, '2024-10-25 08:00:05', '2024-10-25 08:14:55'),
+
+(4, 4, '2024-10-25 08:00:05', '2024-10-25 08:14:55');
 
 
 -- Mối quan hệ N-N 'select' giữa Student và Answer
 -- (Lưu ý: Thiết kế bảng này trong schema.sql hơi lạ
 -- vì nó không liên kết trực tiếp với Test_ID hay Question_ID,
 -- chỉ liên kết với Student và Answer)
-INSERT INTO Student_Answer_Log (Student_User_ID, Question_ID, Selected_Answer_ID, Student_answer_text) VALUES
+INSERT INTO Student_Answer_Log (Student_User_ID, Question_ID, Selected_Answer_ID, Student_answer_text, Test_ID) VALUES
 -- Giả sử SV Cường (3) trả lời Test 1:
 -- Trả lời Câu 1 (Agile) -> chọn đáp án 2 (Đúng)
-(3, 1 ,2, NULL),
+(3, 1 ,2, NULL, 1),
 -- Trả lời Câu 3 (3-tier) -> đây là câu tự luận
-(3, 3 ,7, 'Câu trả lời tự luận của Cường về 3 tầng: Presentation, Logic, Data.'),
+(3, 3 ,7, 'Câu trả lời tự luận của Cường về 3 tầng: Presentation, Logic, Data.', 1),
 
 -- Giả sử SV Dung (4) trả lời Test 1:
 -- Trả lời Câu 1 (Agile) -> chọn đáp án 1 (Sai)
-(4, 1 ,1, NULL),
+(4, 1 ,1, NULL, 1),
 -- Trả lời Câu 3 (3-tier) -> đây là câu tự luận
-(4, 3 ,7, 'Em không chắc lắm nhưng em nghĩ là...'),
+(4, 3 ,7, 'Em không chắc lắm nhưng em nghĩ là...', 1),
 
 -- Giả sử SV Cường (3) trả lời Test 2:
 -- Trả lời Câu 2 (SQL) -> chọn đáp án 4 và 6 (chọn nhiều đáp án)
-(3,2 ,4, NULL),
-(3,2,6, NULL);
+(3,2 ,4, NULL, 2),
+
+-- std 3 - test 3 : 1-5
+(3,1,1, NULL, 3),
+(3,2,6, NULL, 3),
+(3,3,7, NULL, 3),
+(3,4,10, NULL, 3),
+(3,5,11, NULL, 3),
+-- std 4 - test 4 : 2-6
+(4,2,5, NULL, 4),
+(4,3,7, NULL, 4),
+(4,4,10, NULL, 4),
+(4,5,11, NULL, 4),
+(4,6,15, NULL, 4);

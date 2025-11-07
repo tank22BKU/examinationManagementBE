@@ -58,7 +58,7 @@ public class TestAttemptService {
     public TestAttemptHistoryDetailResponse getDetailTestAttemptHistoryOfUser(StudentTestAttemptId studentTestAttemptId) {
         Student student = studentRepository.findById(studentTestAttemptId.getStudentUserId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         Test test = testRepository.findById(studentTestAttemptId.getTestId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-        StudentTestAttempt studentTestAttempt = studentTestAttemptRepository.findByStudentAndTest(student, test);
+        StudentTestAttempt studentTestAttempt = studentTestAttemptRepository.findByStudentAndTest(student, test).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         List<Integer> listQuestionId = testQuestionRepository.findAllByTestId(studentTestAttemptId.getTestId()).stream().map(TestQuestion::getQuestionId).toList();
 
         Duration duration = Duration.between(studentTestAttempt.getStartTime(), studentTestAttempt.getSubmitTime());
@@ -88,7 +88,7 @@ public class TestAttemptService {
                 AtomicInteger numberOfCorrectSelection = new AtomicInteger();
 
                 answerList.forEach(studentAnswer -> {
-                    if (studentAnswer.getIsCorrect().booleanValue()) {
+                    if (ObjectUtils.isNotEmpty(studentAnswer) && studentAnswer.getIsCorrect()) {
                         numberOfCorrectSelection.getAndIncrement();
                         numberOfCorrectAnswer.getAndIncrement();
                     }
@@ -101,12 +101,13 @@ public class TestAttemptService {
                 }
 
             } else {
-                boolean isCorrectAnswer = answerList.getFirst().getIsCorrect().booleanValue();
-                if (isCorrectAnswer) {
-                    int currentScore = question.getScore();
-                    currentQuestionScore = currentScore;
-                    score.addAndGet(currentScore);
-                    numberOfCorrectAnswer.getAndIncrement();
+                if (ObjectUtils.isNotEmpty(answerList) && ObjectUtils.isNotEmpty(answerList.getFirst())) {
+                    if (answerList.getFirst().getIsCorrect()) {
+                        int currentScore = question.getScore();
+                        currentQuestionScore = currentScore;
+                        score.addAndGet(currentScore);
+                        numberOfCorrectAnswer.getAndIncrement();
+                    }
                 }
             }
             QuestionResult questionResult = new QuestionResult(questionId, question.getQuestionText(), currentQuestionScore, questionMaxPoint, questionAnswer, answerList);
