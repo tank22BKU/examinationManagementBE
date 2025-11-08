@@ -49,7 +49,44 @@ public class AiService {
         this.apiUrl = apiUrl;
         this.modelName = modelName;
     }
+    public String getExplanationFromText(ExplanationTextRequest request) {
+        
+        // 1. Xây dựng prompt (trực tiếp từ request, không cần query DB)
+        String prompt = buildPrompt(
+                request.questionText(),
+                request.incorrectAnswerText(),
+                request.correctAnswerText()
+        );
 
+        // 2. Xây dựng request Gemini (Giữ nguyên)
+        Part part = new Part(prompt);
+        Content content = new Content(List.of(part));
+        GeminiRequest aiRequest = new GeminiRequest(List.of(content));
+
+        // 3. Gọi API Gemini (Giữ nguyên)
+        String path = "/v1beta/models/" + this.modelName + ":generateContent"; // (Hoặc path hardcode)
+        GeminiResponse aiResponse = webClient.post()
+                .uri(uriBuilder -> uriBuilder
+                        .path(path)
+                        .queryParam("key", apiKey)
+                        .build())
+                .bodyValue(aiRequest)
+                .retrieve()
+                .bodyToMono(GeminiResponse.class)
+                .block();
+
+        // 4. Trích xuất văn bản (Giữ nguyên)
+        if (aiResponse != null && aiResponse.extractText() != null) {
+            String explanationText = aiResponse.extractText().trim();
+            
+            // Trả về DTO Response (Giữ nguyên từ lần trước)
+            return explanationText;
+            
+        } else {
+            // Ném lỗi (Giữ nguyên từ lần trước)
+            throw new AppException(ErrorCode.NOT_FOUND); 
+        }
+    }
     public String getExplanationFromIds(StudentAnswerRequest request) {
         // 1. Truy vấn DB để lấy dữ liệu text
         // (Trong ứng dụng thực tế, bạn nên xử lý .orElseThrow() tốt hơn)

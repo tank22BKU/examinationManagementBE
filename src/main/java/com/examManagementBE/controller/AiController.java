@@ -1,6 +1,7 @@
 package com.examManagementBE.controller;
 
 import com.examManagementBE.common.constants.EndpointConstants;
+import com.examManagementBE.pojo.request.ai.ExplanationTextRequest;
 import com.examManagementBE.pojo.request.ai.StudentAnswerRequest;
 import com.examManagementBE.service.ai.AiService;
 
@@ -23,8 +24,8 @@ public class AiController {
             consumes = MediaType.APPLICATION_JSON_VALUE, // Nhận vào JSON
             produces = { MediaType.TEXT_PLAIN_VALUE, MediaType.APPLICATION_JSON_VALUE }      // Trả về văn bản thô hoặc JSON nếu có lỗi 
     )
-    public String createExplanation(@RequestBody StudentAnswerRequest request) {
+    public String createExplanation(@RequestBody ExplanationTextRequest request) {
         // Gọi phương thức service MỚI
-        return aiService.getExplanationFromIds(request);
+        return aiService.getExplanationFromText(request);
     }
 }
