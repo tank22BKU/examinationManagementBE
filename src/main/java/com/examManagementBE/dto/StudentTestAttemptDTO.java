@@ -6,4 +6,5 @@ import lombok.Data;
 public class StudentTestAttemptDTO {
     private Integer studentId;
     private TestDTO test;
+    private double totalScore;
 }

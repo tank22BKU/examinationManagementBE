@@ -6,8 +6,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-//@Table(name = EntityConstants.ANSWER_TABLE)
-@Table(name ="answer")
+@Table(name = EntityConstants.ANSWER_TABLE)
+//@Table(name ="answer")
 @Getter
 @Setter
 @AllArgsConstructor

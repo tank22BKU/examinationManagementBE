@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 //@Table(name = EntityConstants.TEST_TABLE)
-@Table(name ="test")
+@Table(name ="Test")
 @Getter
 @Setter
 @AllArgsConstructor

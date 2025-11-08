@@ -10,8 +10,8 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Entity
-//@Table(name = EntityConstants.STUDENT_TEST_ATTEMPT)
-@Table(name = "student_test_attempt")
+@Table(name = EntityConstants.STUDENT_TEST_ATTEMPT)
+//@Table(name = "student_test_attempt")
 @Getter
 @Setter
 @AllArgsConstructor

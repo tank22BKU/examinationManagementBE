@@ -9,8 +9,8 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-//@Table(name = EntityConstants.QUESTION_TABLE)
-@Table(name = "question")
+@Table(name = EntityConstants.QUESTION_TABLE)
+//@Table(name = "question")
 @Getter
 @Setter
 @AllArgsConstructor

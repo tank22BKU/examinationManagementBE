@@ -2,7 +2,7 @@ package com.examManagementBE.common.constants;
 
 public class EntityConstants {
     public static final String USER_TOKENS_TABLE = "user_tokens";
-    public static final String USER_TABLE = "user";
+    public static final String USER_TABLE = "User";
     public static final String ROLE_TABLE = "Role";
     public static final String SEMESTER_TABLE = "Semester";
     public static final String COURSE_TABLE = "Course";
