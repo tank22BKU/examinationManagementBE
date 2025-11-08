@@ -4,6 +4,8 @@ import com.examManagementBE.entity.assessment.Test;
 import com.examManagementBE.entity.assessment.Answer;
 import com.examManagementBE.entity.assessment.Question;
 import com.examManagementBE.entity.assessment.TestQuestion;
+import com.examManagementBE.entity.user.Teacher;
+import com.examManagementBE.pojo.request.assessment.QuestionAnswerRequest;
 import com.examManagementBE.repository.assessment.AnswerRepository;
 import com.examManagementBE.repository.assessment.QuestionRepository;
 import com.examManagementBE.repository.assessment.TestQuestionRepository;
@@ -22,9 +24,18 @@ public class QuestionService {
     private final AnswerRepository  answerRepository;
     private final TestQuestionRepository testQuestionRepository;
 
-    public boolean SaveQuestionList(List<Question> questions) {
-        for (Question question : questions) {
-            questionRepository.save(question);
+    public boolean SaveQuestionList(List<QuestionAnswerRequest> questions, Teacher teacher, Test test) {
+        for (QuestionAnswerRequest request : questions) {
+            Question newQuestion = Question.builder().questionText(request.getQuestionText()).score(request.getScore()).composer(teacher).build();
+            questionRepository.save(newQuestion);
+
+            for (AnswerRequest answer : request.getAnswers()) {
+                Answer newAnswer = Answer.builder().answerText(answer.getAnswerText()).correctAnswer(answer.getCorrectAnswer()).question(newQuestion).build();
+                answerRepository.save(newAnswer);
+            }
+
+            TestQuestion newTestQuestion = TestQuestion.builder().questionId(newQuestion.getQuestionId()).testId(test.getTestId()).build();
+            testQuestionRepository.save(newTestQuestion);
         }
         return true;
     }

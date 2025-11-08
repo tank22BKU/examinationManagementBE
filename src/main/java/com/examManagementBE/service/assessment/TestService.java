@@ -63,7 +63,7 @@ public class TestService {
                 .creator(teacher)
                 .build();
         testRepository.save(test);
-        questionService.SaveQuestionList(request.getQuestions());
+        questionService.SaveQuestionList(request.getQuestions(), teacher, test);
 
         return true;
     }
