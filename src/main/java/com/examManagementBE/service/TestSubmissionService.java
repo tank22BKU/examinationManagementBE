@@ -81,6 +81,7 @@ public class TestSubmissionService {
             StudentTestAttempt newStudentTestAttempt = StudentTestAttempt.builder().id(key).student(student).test(test).score(score.get()).startTime(OffsetDateTime.now()).actualTime(LocalTime.now()).submitTime(OffsetDateTime.now()).build();
             studentTestAttemptRepository.save(newStudentTestAttempt);
             test.setSubmissions(test.getSubmissions() + 1);
+            testRepository.save(test);
         }
 
         return true;

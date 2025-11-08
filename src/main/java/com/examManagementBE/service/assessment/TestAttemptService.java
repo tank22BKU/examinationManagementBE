@@ -140,6 +140,8 @@ public class TestAttemptService {
             TestAttemptHistoryResponse temp = new TestAttemptHistoryResponse(student.getFullName(), student.getUser_ID(), attempt.getId(), attempt.getId().getTestId(), testAttemptDetail.getTestName(), testAttemptDetail.getTotalTimes(), testAttemptDetail.getTotalQuestions(), testAttemptDetail.getScore(), testAttemptDetail.getMaxScore(), mainTest.getReleasedAnswer(), mainTest.getReleasedScore());
             result.add(temp);
         });
+        mainTest.setSubmissions(attempts.size());
+        testRepository.save(mainTest);
         return result;
     }
 }

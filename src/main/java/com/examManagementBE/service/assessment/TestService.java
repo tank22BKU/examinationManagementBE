@@ -53,14 +53,14 @@ public class TestService {
         return questionWithAnswers;
     }
     public boolean saveTest(TestCreationRequest request){
-        Optional<Teacher> teacher = teacherRepository.findById(request.getCreatorId());
+        Teacher teacher = teacherRepository.findById(request.getCreatorId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         Test test = Test.builder().title(request.getTittle())
                 .description(request.getDescription())
                 .passCode(request.getPassCode())
                 .duration(request.getDuration())
-                .questions(request.getQuestionCount())
-                .submissions(request.getSubmisssionCount())
-                .creator(null)
+                .questions(ObjectUtils.isEmpty(request.getQuestions()) ? 0 : request.getQuestions().size())
+                .submissions(0)
+                .creator(teacher)
                 .build();
         testRepository.save(test);
         questionService.SaveQuestionList(request.getQuestions());
