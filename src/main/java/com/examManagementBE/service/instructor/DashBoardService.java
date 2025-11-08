@@ -48,8 +48,9 @@ public class DashBoardService {
                 }
             });
 
-            int averageScore = totalScore.get() / attemptList.size();
-
+            int averageScore = (ObjectUtils.isEmpty(attemptList) || attemptList.size() == 0) ? 0 : totalScore.get() / attemptList.size();
+            maxScore.compareAndSet(Integer.MIN_VALUE, 0);
+            minScore.compareAndSet(Integer.MAX_VALUE, 0);
             DashBoardTestOverviewResponse testOverview = DashBoardTestOverviewResponse.builder().testId(test.getTestId()).testName(test.getTitle()).maxScore(maxScore.get()).minScore(minScore.get()).averageScore(averageScore).totalSubmissions(test.getSubmissions()).build();
             result.add(testOverview);
 
