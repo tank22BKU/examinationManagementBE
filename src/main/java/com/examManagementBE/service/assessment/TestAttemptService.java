@@ -58,7 +58,11 @@ public class TestAttemptService {
     public TestAttemptHistoryDetailResponse getDetailTestAttemptHistoryOfUser(StudentTestAttemptId studentTestAttemptId) {
         Student student = studentRepository.findById(studentTestAttemptId.getStudentUserId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         Test test = testRepository.findById(studentTestAttemptId.getTestId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-        StudentTestAttempt studentTestAttempt = studentTestAttemptRepository.findByStudentAndTest(student, test).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        StudentTestAttempt studentTestAttempt = studentTestAttemptRepository.findByStudentAndTest(student, test);
+        if(ObjectUtils.isEmpty(studentTestAttempt)){
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+
         List<Integer> listQuestionId = testQuestionRepository.findAllByTestId(studentTestAttemptId.getTestId()).stream().map(TestQuestion::getQuestionId).toList();
 
         Duration duration = Duration.between(studentTestAttempt.getStartTime(), studentTestAttempt.getSubmitTime());

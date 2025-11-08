@@ -12,6 +12,6 @@ import java.util.Optional;
 @Repository
 public interface StudentTestAttemptRepository extends JpaRepository<StudentTestAttempt, Integer> {
     List<StudentTestAttempt> findAllByStudent(Student student);
-    Optional<StudentTestAttempt> findByStudentAndTest(Student student, Test test);
+    StudentTestAttempt findByStudentAndTest(Student student, Test test);
     List<StudentTestAttempt> findAllByTest(Test test);
 }

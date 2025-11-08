@@ -36,7 +36,7 @@ public class TestSubmissionService {
         Student student = studentRepository.findById(request.getStudentId()).orElseThrow(() -> new RuntimeException("Student not found"));
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() -> new RuntimeException("Test not found"));
 
-        StudentTestAttempt studentTestAttempt = studentTestAttemptRepository.findByStudentAndTest(student, test).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        StudentTestAttempt studentTestAttempt = studentTestAttemptRepository.findByStudentAndTest(student, test);
         if(ObjectUtils.isNotEmpty(studentTestAttempt)){ // auto-save progress
             AtomicInteger score = new AtomicInteger();
 
