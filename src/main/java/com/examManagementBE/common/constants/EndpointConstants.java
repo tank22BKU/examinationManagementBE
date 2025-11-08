@@ -13,8 +13,6 @@ public class EndpointConstants {
     public static final String DETAILS = "/details";
     public static final String STUDENT = "/student";
     public static final String ALL_STUDENTS = "/students";
-    public static final String DASH_BOARD = "/dashboard";
-    public static final String INSTRUCTOR = "/instructor";
 
     // 🔹 Auth Endpoints
     public static final String AUTH = "/auth";
@@ -30,4 +28,9 @@ public class EndpointConstants {
     public static final String PROGRESS = "/progress";
     public static final String SUBMISSION = "/submission";
     public static final String CURRENT_PROGRESS = "/current-progress";
+    public static final String VERIFY_PASSCODE = "/verify_passcode/{passcode}";
+
+    // AI Endpoints
+    public static final String AI = "/ai";
+    public static final String ASSESSMENT = "/assessment";
 }
