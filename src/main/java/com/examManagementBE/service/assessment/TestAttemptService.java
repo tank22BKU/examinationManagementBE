@@ -114,6 +114,9 @@ public class TestAttemptService {
             questionResultList.add(questionResult);
         });
 
+        studentTestAttempt.setScore(score.get());
+        studentTestAttemptRepository.save(studentTestAttempt);
+
         response.setScore(score.get());
         response.setMaxScore(maxScore.get());
         response.setTotalCorrectQuestions(numberOfCorrectAnswer.get());
