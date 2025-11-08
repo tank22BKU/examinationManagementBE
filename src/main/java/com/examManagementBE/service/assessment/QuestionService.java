@@ -7,6 +7,7 @@ import com.examManagementBE.entity.assessment.TestQuestion;
 import com.examManagementBE.repository.assessment.AnswerRepository;
 import com.examManagementBE.repository.assessment.QuestionRepository;
 import com.examManagementBE.repository.assessment.TestQuestionRepository;
+import com.examManagementBE.pojo.request.assessment.AnswerRequest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,11 @@ public class QuestionService {
                 .filter(q -> q != null)
                 .toList();
     }
-    public List<Answer> getAllAnswersByQuestion(Question question) {
+    public List<AnswerRequest> getAllAnswersByQuestion(Question question) {
         // Implementation to fetch answers by question
-        return answerRepository.findAllByQuestion(question);
+        List<Answer> answers = answerRepository.findAllByQuestion(question);
+        List<AnswerRequest> ansReq = answers.stream().map(answer -> new AnswerRequest(answer.getAnswerId(), answer.getAnswerText(),answer.getCorrectAnswer())).toList();
+        return ansReq;
     }
 
 }
