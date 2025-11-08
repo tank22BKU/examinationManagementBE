@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TestWithQuestionResponse<T> {
+   Integer testId;
    String description;
    String title;
    Integer duration;
