@@ -129,6 +129,30 @@ public class AiService {
     }
 
     private String buildPrompt(String questionText, String incorrectOptionText, String correctOptionText) {
+        boolean isCorrect = (incorrectOptionText == null || incorrectOptionText.isBlank());
+        if (isCorrect) {
+                return """
+                Bạn là một trợ lý giảng dạy AI. Một sinh viên đã trả lời ĐÚNG một câu hỏi trắc nghiệm.
+               
+               Nhiệm vụ của bạn là:
+               1. Đưa ra một lời chúc mừng ngắn gọn (ví dụ: "Chính xác!", "Chúc mừng!").
+               2. Ngay sau đó, cung cấp một lời giải thích rõ ràng, súc tích để củng cố kiến thức, giải thích tại sao câu trả lời của họ lại chính xác.
+
+               QUAN TRỌNG: Chỉ trả về lời chúc mừng và phần giải thích. KHÔNG thêm bất kỳ lời chào riêng biệt nào (ví dụ: "Chào bạn") hoặc câu kết (ví dụ: "Hy vọng điều này hữu ích!").
+
+               ---
+               Nội dung câu hỏi:
+               %s
+
+               Câu trả lời đúng (sinh viên đã chọn):
+               %s
+               ---
+               Giải thích (BẮT ĐẦU TỪ ĐÂY):
+               """.formatted(
+                questionText,
+                correctOptionText
+               );                
+        }
         return """
                 Bạn là một trợ lý giảng dạy AI. Một sinh viên đã trả lời sai một câu hỏi trắc nghiệm.
                 Nhiệm vụ của bạn là cung cấp một lời giải thích rõ ràng, súc tích tại sao câu trả lời của sinh viên lại sai và tại sao câu trả lời đúng lại chính xác.
